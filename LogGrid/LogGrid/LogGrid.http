@@ -1,0 +1,6 @@
+@LogGrid_HostAddress = http://localhost:5190
+
+GET {{LogGrid_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
