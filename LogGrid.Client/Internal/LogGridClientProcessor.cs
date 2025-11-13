@@ -13,9 +13,9 @@ namespace LogGrid.Client.Internal
     {
         private readonly ConcurrentQueue<LogEntry> _queue = new ConcurrentQueue<LogEntry>();
         private readonly IHttpClientFactory _httpClientFactory;
-        private readonly IOptionsMonitor<LogGridClientConfig> _config;
+        private readonly LogGridClientConfig _config;
 
-        public LogGridClientProcessor(IHttpClientFactory httpClientFactory, IOptionsMonitor<LogGridClientConfig> config)
+        public LogGridClientProcessor(IHttpClientFactory httpClientFactory, LogGridClientConfig config)
         {
             _httpClientFactory = httpClientFactory;
             _config = config;
@@ -30,14 +30,14 @@ namespace LogGrid.Client.Internal
         {
             while (!stoppingToken.IsCancellationRequested)
             {
-                if (!_queue.IsEmpty && _config.CurrentValue.Enabled)
+                if (!_queue.IsEmpty && _config.Enabled)
                 {
                     var client = _httpClientFactory.CreateClient("LogGrid");
                     if (_queue.TryDequeue(out var logEntry))
                     {
                         try
                         {
-                            var response = await client.PostAsJsonAsync(_config.CurrentValue.ApiUrl + "/api/logs", logEntry, stoppingToken);
+                            var response = await client.PostAsJsonAsync(_config.ApiUrl + "/api/logs", logEntry, stoppingToken);
                             if (!response.IsSuccessStatusCode)
                             {
                                 // Basic retry: re-queue the log entry

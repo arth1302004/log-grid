@@ -12,17 +12,22 @@ namespace LogGrid.Client
 {
     public static class LogGridExtensions
     {
-        public static ILoggingBuilder AddLogGrid(this ILoggingBuilder builder, IConfiguration configuration)
+        public static ILoggingBuilder AddLogGridClient(this ILoggingBuilder builder, IConfiguration configuration)
         {
             builder.Services.Configure<LogGridClientConfig>(configuration);
             builder.Services.AddHttpClient("LogGrid");
-            builder.Services.AddSingleton<LogGridClientProcessor>();
+            builder.Services.AddSingleton(sp =>
+            {
+                var config = sp.GetRequiredService<IOptionsMonitor<LogGridClientConfig>>().CurrentValue;
+                var httpClientFactory = sp.GetRequiredService<IHttpClientFactory>();
+                return new LogGridClientProcessor(httpClientFactory, config);
+            });
             builder.Services.AddHostedService(sp => sp.GetRequiredService<LogGridClientProcessor>());
 
             builder.Services.TryAddEnumerable(
                 ServiceDescriptor.Singleton<ILoggerProvider, LogGridClientProvider>(sp =>
                 {
-                    var config = sp.GetRequiredService<IOptionsMonitor<LogGridClientConfig>>();
+                    var config = sp.GetRequiredService<IOptionsMonitor<LogGridClientConfig>>().CurrentValue;
                     var processor = sp.GetRequiredService<LogGridClientProcessor>();
                     var webHostEnvironment = sp.GetRequiredService<IWebHostEnvironment>();
                     var httpContextAccessor = sp.GetRequiredService<IHttpContextAccessor>();
