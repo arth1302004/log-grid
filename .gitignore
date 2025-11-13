@@ -1,0 +1,40 @@
+# Visual Studio
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Rider
+.idea/
+
+# Build results
+[Bb]in/
+[Oo]bj/
+
+# Node.js
+node_modules/
+dist/
+npm-debug.log*
+yarn-error.log*
+
+# Rider
+.idea/
+
+# User-specific files
+*.DS_Store
+
+# Log files
+logs/
+*.log
+
+# Environment files
+.env
+
+# ASP.NET Core development settings
+appsettings.Development.json
+Properties/launchSettings.json
+
+# Project directories
+Backend/
+Frontend/
