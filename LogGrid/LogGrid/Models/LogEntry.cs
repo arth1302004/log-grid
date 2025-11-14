@@ -6,7 +6,7 @@ public class LogEntry
 {
     [JsonPropertyName("Application")]
     public string Application { get; set; } = string.Empty;
-
+        
     [JsonPropertyName("Level")]
     public string Level { get; set; } = string.Empty;
 

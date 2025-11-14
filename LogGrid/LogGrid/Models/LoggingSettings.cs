@@ -22,5 +22,12 @@ namespace LogGrid.Models
         public int RetentionDays { get; set; } = 7;
         public string Path { get; set; } = "logs";
         public string OutputFormat { get; set; } = "json";
+        public ArchiveSettings Archive { get; set; } = new();
+    }
+
+    public class ArchiveSettings
+    {
+        public bool UseArchive { get; set; }
+        public string ArchivePath { get; set; } = "archive";
     }
 }

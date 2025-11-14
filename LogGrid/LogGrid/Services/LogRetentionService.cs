@@ -40,7 +40,9 @@ public class LogRetentionService : BackgroundService
 
     private void CleanupOldLogFiles()
     {
-        var retentionDays = _loggingProviders.CurrentValue.File.RetentionDays;
+        var fileSettings = _loggingProviders.CurrentValue.File;
+        var retentionDays = fileSettings.RetentionDays;
+
         if (retentionDays <= 0)
         {
             _logger.LogInformation("Log file retention is disabled (RetentionDays set to {RetentionDays}).", retentionDays);
@@ -49,7 +51,7 @@ public class LogRetentionService : BackgroundService
 
         _logger.LogInformation("Starting cleanup of log files older than {RetentionDays} days.", retentionDays);
 
-        var logDirectory = Path.Combine(Directory.GetCurrentDirectory(), "logs");
+        var logDirectory = Path.Combine(Directory.GetCurrentDirectory(), fileSettings.Path);
         if (!Directory.Exists(logDirectory))
         {
             _logger.LogWarning("Log directory '{LogDirectory}' not found. Nothing to clean up.", logDirectory);
@@ -57,7 +59,8 @@ public class LogRetentionService : BackgroundService
         }
 
         var files = Directory.GetFiles(logDirectory, "*.json");
-        var deletedCount = 0;
+        var processedCount = 0;
+        var action = fileSettings.Archive.UseArchive ? "archived" : "deleted";
 
         foreach (var file in files)
         {
@@ -68,9 +71,20 @@ public class LogRetentionService : BackgroundService
                 {
                     if (fileDate < DateTime.UtcNow.Date.AddDays(-retentionDays))
                     {
-                        File.Delete(file);
-                        deletedCount++;
-                        _logger.LogInformation("Deleted old log file: {FileName}", Path.GetFileName(file));
+                        if (fileSettings.Archive.UseArchive)
+                        {
+                            var archivePath = Path.Combine(Directory.GetCurrentDirectory(), fileSettings.Archive.ArchivePath);
+                            Directory.CreateDirectory(archivePath);
+                            var destFileName = Path.Combine(archivePath, Path.GetFileName(file));
+                            File.Move(file, destFileName, true);
+                        }
+                        else
+                        {
+                            File.Delete(file);
+                        }
+                        
+                        processedCount++;
+                        _logger.LogInformation("{Action} old log file: {FileName}", CultureInfo.CurrentCulture.TextInfo.ToTitleCase(action), Path.GetFileName(file));
                     }
                 }
                 else
@@ -80,17 +94,17 @@ public class LogRetentionService : BackgroundService
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Failed to delete log file: {FileName}", Path.GetFileName(file));
+                _logger.LogError(ex, "Failed to {action} log file: {FileName}", action, Path.GetFileName(file));
             }
         }
 
-        if (deletedCount > 0)
+        if (processedCount > 0)
         {
-            _logger.LogInformation("Log cleanup complete. Deleted {DeletedCount} file(s).", deletedCount);
+            _logger.LogInformation("Log cleanup complete. {Action} {ProcessedCount} file(s).", CultureInfo.CurrentCulture.TextInfo.ToTitleCase(action), processedCount);
         }
         else
         {
-            _logger.LogInformation("No old log files to delete.");
+            _logger.LogInformation("No old log files to {action}.", action);
         }
     }
     
