@@ -18,6 +18,9 @@ public class LogEntry
 
     [JsonPropertyName("Source")]
     public string Source { get; set; } = string.Empty;
+    
+    [JsonPropertyName("OutputFormat")]
+    public string OutputFormat { get; set; } = "json";
 
     [JsonPropertyName("Properties")]
     public Dictionary<string, object>? Properties { get; set; }

@@ -10,6 +10,7 @@ namespace LogGrid.Client.Internal
         public string Level { get; set; } = string.Empty;
         public string Message { get; set; } = string.Empty;
         public string Source { get; set; } = string.Empty;
+        public string OutputFormat { get; set; } = "json";
         public Dictionary<string, object>? Properties { get; set; }
     }
 }

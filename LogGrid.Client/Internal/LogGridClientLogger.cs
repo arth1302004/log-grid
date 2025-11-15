@@ -89,6 +89,7 @@ namespace LogGrid.Client.Internal
                 Level = logLevel.ToString(),
                 Message = message,
                 Source = _name,
+                OutputFormat = _config.File.OutputStructure,
                 Properties = properties
             };
 

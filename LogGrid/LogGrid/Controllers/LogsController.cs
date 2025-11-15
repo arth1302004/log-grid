@@ -38,6 +38,8 @@ namespace LogGrid.Controllers
             {
                 logEntry.Timestamp = DateTime.UtcNow;
             }
+            
+            _logger.LogInformation("Received log from {Application}", logEntry.Application);
 
             if (!_loggingProviders.CurrentValue.IncludeTraceId && logEntry.Properties != null && logEntry.Properties.ContainsKey("TraceId"))
             {

@@ -25,17 +25,21 @@ namespace LogGrid.Services
             try
             {
                 var fileSettings = _loggingProviders.CurrentValue.File;
-                var logDirectory = Path.Combine(Directory.GetCurrentDirectory(), fileSettings.Path);
+                
+                var logDirectory = Path.IsPathRooted(fileSettings.Path) 
+                    ? fileSettings.Path 
+                    : Path.Combine(Directory.GetCurrentDirectory(), fileSettings.Path);
+                
                 Directory.CreateDirectory(logDirectory);
 
-                var fileName = fileSettings.OutputFormat.ToLower() == "json" 
+                var fileName = logEntry.OutputFormat.ToLower() == "json" 
                     ? $"{DateTime.UtcNow:yyyy-MM-dd}.json" 
                     : $"{DateTime.UtcNow:yyyy-MM-dd}.txt";
                 
                 var logFilePath = Path.Combine(logDirectory, fileName);
 
                 string logString;
-                if (fileSettings.OutputFormat.ToLower() == "json")
+                if (logEntry.OutputFormat.ToLower() == "json")
                 {
                     logString = JsonSerializer.Serialize(logEntry, new JsonSerializerOptions { WriteIndented = true });
                 }
