@@ -3,14 +3,11 @@ using System.Collections.Generic;
 
 namespace LogGrid.Client.Internal
 {
-    public class LogEntry
+    public class LogRequest
     {
-        public string Application { get; set; } = string.Empty;
-        public DateTime Timestamp { get; set; }
         public string Level { get; set; } = string.Empty;
         public string Message { get; set; } = string.Empty;
-        public string Source { get; set; } = string.Empty;
-        public string OutputFormat { get; set; } = "json";
         public Dictionary<string, object>? Properties { get; set; }
+        public Exception? Exception { get; set; }
     }
 }
