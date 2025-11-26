@@ -22,7 +22,8 @@ internal static class StandardLogSerializer
     public static readonly JsonSerializerOptions JsonOptions = new(JsonSerializerDefaults.Web)
     {
         PropertyNamingPolicy = null, // Use exact property names from the record
-        WriteIndented = false
+        WriteIndented = false,
+        Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping
     };
 
     public static StandardLogPayload BuildPayload(LogEvent logEvent)
