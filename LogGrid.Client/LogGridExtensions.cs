@@ -124,7 +124,7 @@ namespace LogGrid.Client
 
             // Register LogGridDirectClient and its configuration automatically
             builder.Services.Configure<LogGridClientConfig>(configuration.GetSection("LogGridClient"));
-            builder.Services.AddScoped<LogGridDirectClient>();
+            builder.Services.AddSingleton<LogGridDirectClient>();
 
             return builder;
         }

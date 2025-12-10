@@ -20,7 +20,7 @@ namespace LogGrid.Client
             WriteIndented = false
         };
 
-        public LogGridDirectClient(IOptionsMonitor<LogGridClientConfig> configMonitor, IHttpClientFactory? httpClientFactory = null)
+        public LogGridDirectClient(IOptionsMonitor<LogGridClientConfig> configMonitor)
         {
             if (configMonitor == null) throw new ArgumentNullException(nameof(configMonitor));
 
@@ -31,20 +31,6 @@ namespace LogGrid.Client
                 _config = CloneConfig(updated);
                 _effectiveLevels = LogLevelEvaluator.Evaluate(_config.DirectClientLogLevels);
             });
-
-            var httpClient = httpClientFactory?.CreateClient("LogGridClient") ?? new HttpClient();
-
-            // Create the raw HTTP sink
-            var httpSink = new LogGridSink(httpClient, _config.ApiUrl);
-
-            // Wrap inside batching sink
-            var batchedSink = new LogGridPeriodicSink(
-                httpSink,
-                batchSizeLimit: Math.Max(1, _config.BatchSize),
-                period: TimeSpan.FromSeconds(Math.Max(1, _config.BatchPeriodSeconds))
-            );
-
-            // _logger removed to prevent duplicate logs. We rely solely on _hostLogger.
 
             // Reuse the host Serilog pipeline so that direct-client logs also land in standard sinks
             _hostLogger = Log.Logger.ForContext<LogGridDirectClient>();

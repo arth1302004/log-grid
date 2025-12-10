@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net6.0</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
 
@@ -9,7 +9,7 @@
 
     <PropertyGroup>
         <PackageId>LogGrid.Client</PackageId>
-        <Version>1.0.0</Version>
+        <Version>8.0.0</Version>
         <Authors>LogGrid Team</Authors>
         <Company>LogGrid</Company>
         <Description>A client library for LogGrid logging system.</Description>
@@ -20,17 +20,17 @@
         <FrameworkReference Include="Microsoft.AspNetCore.App" />
     </ItemGroup>
     <ItemGroup>
-      <PackageReference Include="Serilog" Version="3.1.1" />
-      <PackageReference Include="Serilog.Extensions.Logging" Version="3.1.0" />
-      <PackageReference Include="Serilog.Settings.Configuration" Version="3.4.0" />
+      <PackageReference Include="Serilog" Version="4.3.0" />
+      <PackageReference Include="Serilog.Extensions.Logging" Version="9.0.2" />
+      <PackageReference Include="Serilog.Settings.Configuration" Version="9.0.0" />
 
-      <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
-      <PackageReference Include="Serilog.Sinks.Http" Version="8.0.0" />
+      <PackageReference Include="Serilog.Sinks.File" Version="7.0.0" />
+      <PackageReference Include="Serilog.Sinks.Http" Version="9.2.0" />
 
-      <PackageReference Include="Serilog.Sinks.PeriodicBatching" Version="3.1.0" />
-      <PackageReference Include="Serilog.Sinks.Console" Version="4.1.0" />
-      <PackageReference Include="Serilog.Enrichers.Environment" Version="2.3.0" />
-      <PackageReference Include="Serilog.Enrichers.Thread" Version="3.1.0" />
+      <PackageReference Include="Serilog.Sinks.PeriodicBatching" Version="5.0.0" />
+      <PackageReference Include="Serilog.Sinks.Console" Version="6.0.0" />
+      <PackageReference Include="Serilog.Enrichers.Environment" Version="3.0.0" />
+      <PackageReference Include="Serilog.Enrichers.Thread" Version="4.0.0" />
     </ItemGroup>
 
 </Project>
