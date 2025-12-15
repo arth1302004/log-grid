@@ -4,6 +4,7 @@ namespace LogGrid.Client
     {
         public bool Enabled { get; set; } = false;
         public string ApiUrl { get; set; } = "http://localhost:5190";
+        public string ApplicationInsightsConnectionString { get; set; } = "";
         public ProviderConfig Providers { get; set; } = new ProviderConfig();
         public FileConfig File { get; set; } = new FileConfig();
         public int BatchSize { get; set; } = 50;
@@ -28,6 +29,7 @@ namespace LogGrid.Client
     {
         public bool UseFile { get; set; } = false;
         public bool UseConsole { get; set; } = false;
+        public bool UseApplicationInsights { get; set; } = false;
     }
 
 

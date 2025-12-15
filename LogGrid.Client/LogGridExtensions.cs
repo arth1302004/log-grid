@@ -115,6 +115,17 @@ namespace LogGrid.Client
                         LogEventLevel.Debug
                     );
                 }
+
+                // ------------------- APPLICATION INSIGHTS -------------------
+                if (logGridConfig.Providers.UseApplicationInsights && 
+                    !string.IsNullOrWhiteSpace(logGridConfig.ApplicationInsightsConnectionString))
+                {
+                    loggerConfiguration.WriteTo.ApplicationInsights(
+                        connectionString: logGridConfig.ApplicationInsightsConnectionString,
+                        telemetryConverter: TelemetryConverter.Traces,
+                        restrictedToMinimumLevel: LogEventLevel.Information
+                    );
+                }
             }
 
             // Register Serilog with .NET logging system
